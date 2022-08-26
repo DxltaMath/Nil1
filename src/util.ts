@@ -7,24 +7,27 @@ import { transform } from "sucrase";
 /** Convert to/from ES6 */
 const es6 = (...args: Parameters<typeof String["raw"]>) => transform(String.raw(...args), { transforms: ["typescript"] }).code;
 
+/** Latest unmodified main.js */
+let latestVanillaFile : string | null = null;
+
+/** Latest patched main.js */
+let latestPatchedFile : string | null = null;
+
+
 
 setInterval(() => {
-	patchedPublicGameFile = null;
+	latestVanillaFile = null;
+	latestPatchedFile = null;
 }, 30*60*1000); // 30 minutes
 
-const gameFileCache: Record<string, string> = {};
 
-export const getGameFile = async (version: string): Promise<string> => {
-	if (version in gameFileCache) return gameFileCache[version];
-	if (!version.match(/^[0-9-.]+$/)) throw new Error("Invalid version specified.");
+export async function getFile () : Promise<string> {
 	try {
-		return (gameFileCache[version] = await (
-			await fetch(`https://code.prodigygame.com/code/${version}/game.min.js?v=${version}`)
-		).text());
-	} catch (e: unknown) {
-		throw new Error(`Could not fetch game file with version ${version}.\nReason: ${e}`);
+		return await (await fetch(`https://www.deltamath.com/app/main.761406757919c0973f71.js`)).text();
+	} catch (error : unknown) {
+		throw new Error(`Could not fetch main.js file.\nReason: ${error}`);
 	}
-};
+}
 
 
 
@@ -128,10 +131,12 @@ ${es6`
 `;
 }
 
-const patchedFileCache: Record<string, string> = {};
 
-export const getPatchedGameFile = async (version: string): Promise<string> => {
-	if (version in patchedFileCache) return patchedFileCache[version];
-	return (patchedFileCache[version] = patchFile(await getGameFile(version)));
+export function getPatchedFile () : string {
+	if (latestPatchedFile !== null) {
+		return latestPatchedFile;
+	} else {
+		return "soonTM";
+	}
 };
 
