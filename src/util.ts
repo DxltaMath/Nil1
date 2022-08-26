@@ -8,7 +8,6 @@ import { transform } from "sucrase";
 const es6 = (...args: Parameters<typeof String["raw"]>) => transform(String.raw(...args), { transforms: ["typescript"] }).code;
 
 /** Latest unmodified main.js */
-// @ts-expect-error
 let latestVanillaFile : string | null = null;
 
 /** Latest patched main.js */
@@ -23,94 +22,26 @@ setInterval(() => {
 
 export async function getFile () : Promise<string> {
 	try {
-		return await (await fetch(`https://www.deltamath.com/app/main.761406757919c0973f71.js`)).text();
+		if (latestVanillaFile === null) {
+			const mainjs = await (await fetch(`https://www.deltamath.com/app/main.761406757919c0973f71.js`)).text();
+			latestVanillaFile = mainjs;
+			return mainjs;
+		} else {
+			return latestVanillaFile;
+		}
 	} catch (error : unknown) {
 		throw new Error(`Could not fetch main.js file.\nReason: ${error}`);
 	}
 }
 
 
+export function patchFile (unmodifiedFile : string) : string {
 
-export const patchFile = (str: string): string => {
-	const variables = [str.match(/window,function\((.)/)![1], str.match(/var (.)={}/)![1]] as string[];
-	const patches: [string | RegExp, string][] = Object.entries({
-		[`s),this._game=${variables![1]}`]: `s),this._game=${variables![1]};
-			jQuery.temp = window._;
-			let lodashChecker = setInterval(() => {
-				if (jQuery.temp !== window._) {
-					window._ = jQuery.temp;
-					delete jQuery.temp;
-					clearInterval(lodashChecker);
-				}
-			});
-			Object.defineProperty(window._, "instance", { 
-				get: () => ${variables![0]}.instance,
-		enumerable: true,
-	configurable: true
-			});`,
-		[`${variables![0]}.constants=Object`]: `window._.constants=${variables![0]},${variables![0]}.constants=Object`,
-		[`window,function(${variables![0]}){var ${variables![1]}={};`]: `window,function(${variables![0]}){var ${variables![1]}={};window._.modules=${variables![1]};`,
-		[`${variables![0]}.prototype.hasMembership=`]: `${variables![1]}.prototype.hasMembership=_=>true,${variables![1]}.prototype.originalHasMembership=`,
-		"answerQuestion=function(){": `answerQuestion=function(){
-			if (!_.constants.get('GameConstants.Debug.EDUCATION_ENABLED')) {
-				const wasCorrect = Math.random() < _.constants.get('GameConstants.Debug.AUTO_ANSWER_CORRECT_PERCENT');
-                this.onQuestionAnswered.dispatch(wasCorrect, 0, null);
-                if (wasCorrect) {
-                    this.onQuestionAnsweredCorrectly.dispatch(0, null);
-                } else {
-                    this.onQuestionAnsweredIncorrectly.dispatch(0, null);
-                }
-                return;
-			}
-		`
-	});
-	patches.push([/type\.sendEvent=function\((.), (.), (.)\) \{/, `type.sendEvent=function($1, $2, $3) {
-			if (!_.constants.get('GameConstants.Debug.EDUCATION_ENABLED')) {
-				return
-			}
-		`])
-	patches.push([/(var .=this.findParameter("externalFactory"))/, `
-	if (!_.constants.get('GameConstants.Debug.EDUCATION_ENABLED')) {
-		const wasCorrect: boolean = Math.random() < _.constants.get('GameConstants.Debug.AUTO_ANSWER_CORRECT_PERCENT');
-		this.finish({ answerCorrect: wasCorrect, responseTime: 0 });
-		return;
-	}
-	$1`]);
-	patches.push([/openQuestionInterfaceThenEmitNotifications=function\((.), (.), (.), (.), (.)\) \{/, `openQuestionInterfaceThenEmitNotifications=function($1, $2, $3, $4, $5) {
-	if (!_.constants.get('GameConstants.Debug.EDUCATION_ENABLED')) {
-		const wasCorrect = true;
-		const skill = {}
-		const questionAnswerResponse = { eventType, skill, wasCorrect };
-		this.fireEvent(MathTowerNotificationType.TOWER_TOWN_QUESTION_ANSWERED, questionAnswerResponse);
-		if (callback) {
-			callback(wasCorrect, 10, 1, false, false, skill);
-		}
-		return;
-	}
-	`]);
-	patches.push([/.\.setContentVisible\(!1\)\}\)/, "})"]);
 	return `
-${es6`
-	/** DO NOT TOUCH **/
-	const _getBox=(o,t)=>({string:"+",style:"font-size: 1px; padding: 0 "+Math.floor(o/2)+"px; line-height: "+t+"px;"});
-	console.image=((o,t=1)=>{const e=new Image;e.onload=(()=>{const n=_getBox(e.width*t,e.height*t);
-	console.log("%c"+n.string,n.style+"background: url("+o+"); background-size: "+e.width*t+"px "
-	+e.height*t+"px; color: transparent;")}),e.src=o});
-	/** ok touch now */
-	const oldLog = console.log.bind(console);
-	console.log = (...d) => {
-		if (d && d.length && typeof d[0] === "string" && d[0].includes("This is a browser feature for developers only")) return "lol no";
-		if (new Error().stack?.split("\n").reverse()[0]?.includes("load-identity")) return "fuck you";
-		return oldLog(...d);
-	};
-	_.variables = Object.create(null);
-`}
 
-${patches.reduce((l, c) => l.replace(...c), str)}
+	${es6`${unmodifiedFile}`}
 
-${es6`
-	
-
+	${es6`
 
 	console.log("%cNil", "font-size:69px;color:#540052;font-weight:900;font-family:sans-serif;");
 	console.log("%cVersion ${VERSION}", "font-size:20px;color:#000025;font-weight:700;font-family:sans-serif;");
@@ -131,12 +62,11 @@ ${es6`
 `;
 }
 
-
-export function getPatchedFile () : string {
+export async function getPatchedFile () : Promise<string> {
 	if (latestPatchedFile !== null) {
 		return latestPatchedFile;
 	} else {
-		return "soonTM";
+		return await (await patchFile(latestVanillaFile || (await (getFile())).valueOf())).valueOf();
 	}
 };
 

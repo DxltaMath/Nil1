@@ -26,17 +26,17 @@ import beautify from "js-beautify"; // JavaScript beautifier
 
 
 
-
+	app.get("/main*js", (_req, res) => { res.redirect("/app/main.js") })
 
 
 
     // ./app/main.761406757919c0973f71.js
     // @ts-expect-error
-	app.get(/app\/main.*.js/g, async (req, res) => {
+	app.get("/app/main*js", async (req, res) => {
 		try {
             let output : string = "";
             output += "// modified main.js \n\n";
-            output += (UNMINIFY_SOUCE) ? beautify(getPatchedFile()) : getPatchedFile();
+            output += (UNMINIFY_SOUCE) ? beautify(await (await getPatchedFile()).valueOf()) : await (await getPatchedFile()).valueOf();
 			res.type("js").send(output);
 		} catch (error : unknown) {
 			console.error(error);
