@@ -22,4 +22,5 @@ export const RateLimitRequests : number = 0;
 export const rLimit = RateLimit({
      windowMs:  RateLimitTime || 10*1000, // 10 seconds
      max: RateLimitRequests || 20, // limit each IP to 20 requests per windowMs
+     message: "You are being rate limited as you are sending too many requests.",
 }); 
