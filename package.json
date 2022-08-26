@@ -27,11 +27,15 @@
   },
   "homepage": "https://github.com/DxltaMath/Nil#readme",
   "dependencies": {
-    "express": "^4.18.1"
+    "express": "^4.18.1",
+    "express-rate-limit": "^6.5.2",
+    "node-fetch": "^2.6.7",
+    "sucrase": "^3.25.0"
   },
   "devDependencies": {
     "@types/express": "^4.17.13",
     "@types/node": "^18.7.13",
+    "@types/node-fetch": "^2.6.2",
     "typescript": "^4.8.2"
   }
 }
