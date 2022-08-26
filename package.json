@@ -1,0 +1,20 @@
+{
+  "name": "@deltamath/nil",
+  "version": "0.0.1",
+  "description": "A code-file modifier for Delta Math.",
+  "main": "./dist/index.js",
+  "scripts": {
+    "prestart": "npx tsc",
+    "start": "node  ./dist/index.js",
+    "poststart": "rm -rf ./dist/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DxltaMath/Nil.git"
+  },
+  "keywords": ["dxltamath", "dxlta", "delta", "deltamath", "math", "hacking"],
+  "author": "gemsvido",
+  "license": "SEE LICENSE IN LICENSE.txt",
+  "bugs": { "url": "https://github.com/DxltaMath/Nil/issues" },
+  "homepage": "https://github.com/DxltaMath/Nil#readme"
+}
