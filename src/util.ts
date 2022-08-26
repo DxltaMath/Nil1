@@ -14,11 +14,10 @@ let latestVanillaFile : string | null = null;
 let latestPatchedFile : string | null = null;
 
 
-
 setInterval(() => {
 	latestVanillaFile = null;
 	latestPatchedFile = null;
-}, 30*60*1000); // 30 minutes
+}, 30*60*1000); // Every 30 minutes
 
 
 export async function getFile () : Promise<string> {

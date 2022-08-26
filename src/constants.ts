@@ -16,6 +16,10 @@ export const VERSION : string = "" || "0.0.1";
  * CAUTION: dGUIs have complete access. Only use dGUIs that you trust. */
 export const GUI_LINK : string = "" || "SoonTM lol";
 
+/** Set this to true if you would like to unminify main.js
+ * CAUTION: this will HEAVILY increase the filesize of main.js- use for debugging ONLY. */
+export const UNMINIFY_SOUCE : boolean = false;
+
 /** Insert your own contents of index.html here, if not Nil's normal index.html will be used.
  * CAUTION: Remember that this is the exported main page of the site. Be wise. */
 export const INDEX_HTML : string = "" || fs.readFileSync(path.resolve(__dirname, "../html/index.html"), "utf8").valueOf();
