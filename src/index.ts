@@ -2,7 +2,7 @@ import type { Server } from "http"; // Server typings
 import express from "express"; // Express server
 import cors from "cors"; // CORS
 import Nil from "./util"; // Gamefile patchers
-import { /* DOWNLOAD_LINK, */ VERSION, /* LICENSE_LINK, */ HTTP_PORT, UNMINIFY_SOUCE } from "./constants"; // Constants
+import { /* DOWNLOAD_LINK, */ VERSION, /* LICENSE_LINK, */ HTTP_PORT, UNMINIFY_SOUCE, INDEX_HTML, STYLE_CSS } from "./constants"; // Constants
 import beautify from "js-beautify"; // JavaScript beautifier
 
 
@@ -64,26 +64,12 @@ import beautify from "js-beautify"; // JavaScript beautifier
     // ./gui
     app.get("/gui", (_req, res) => { res.type("text/js").send("latestCheatGui"); });
 
+	// style.css
+	app.get("/style.css", (_req, res) => { res.status(200).type("text/css").send(STYLE_CSS); });
 
+	// index.html
+	app.get("/", (_req, res) => { res.status(200).type("text/html").send(INDEX_HTML); });
 
-
-	app.get("/", (_req, res) => {
-		res
-			.status(200)
-			.type("text/html")
-			.send(`<!DOCTYPE html>
-			<html>
-				<head>
-					<title>Delta Math Patcher</title>
-					<meta charset="utf-8" />
-					<link rel="icon" type="image/png" href="https://raw.githubusercontent.com/DxltaMath/assets/master/profile/DxltaMath.jpg"/>
-				</head>	
-				<body>
-					<h1>Delta Math Patcher</h1>
-					<p>This is a tool for patching the main.js file of the Delta Math client.</p>
-				</body>	
-			</html>`);
-	});
 
 	const addr: ReturnType<Server["address"]> = app.listen(HTTP_PORT, () =>
 		console.log(`[Nil] Nil has started on :${typeof addr === "string" ? addr : addr?.port ?? ""}!`)
