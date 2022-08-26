@@ -1,7 +1,7 @@
 import type { Server } from "http"; // Server typings
 import express from "express"; // Express server
 import cors from "cors"; // CORS
-import { getPatchedFile } from "./util"; // Gamefile patchers
+import Nil from "./util"; // Gamefile patchers
 import { /* DOWNLOAD_LINK, */ VERSION, /* LICENSE_LINK, */ HTTP_PORT, UNMINIFY_SOUCE } from "./constants"; // Constants
 import beautify from "js-beautify"; // JavaScript beautifier
 
@@ -36,7 +36,7 @@ import beautify from "js-beautify"; // JavaScript beautifier
 		try {
             let output : string = "";
             output += "// modified main.js \n\n";
-            output += (UNMINIFY_SOUCE) ? beautify(await (await getPatchedFile()).valueOf()) : await (await getPatchedFile()).valueOf();
+            output += (UNMINIFY_SOUCE) ? beautify(await (await Nil.getPatchedFile()).valueOf()) : await (await Nil.getPatchedFile()).valueOf();
 			res.type("js").send(output);
 		} catch (error : unknown) {
 			console.error(error);
