@@ -1,11 +1,9 @@
 import type { Server } from "http"; // Server typings
 import express from "express"; // Express server
 import cors from "cors"; // CORS
-import { getPatchedFile, getFile } from "./util"; // Gamefile patchers
-import { DOWNLOAD_LINK, VERSION, LICENSE_LINK, HTTP_PORT, UNMINIFY_SOUCE } from "./constants"; // Constants
+import { getPatchedFile } from "./util"; // Gamefile patchers
+import { /* DOWNLOAD_LINK, */ VERSION, /* LICENSE_LINK, */ HTTP_PORT, UNMINIFY_SOUCE } from "./constants"; // Constants
 import beautify from "js-beautify"; // JavaScript beautifier
-import { hash } from "./hash"; // Hash function
-import fetch from "node-fetch"; // fetch
 
 
 
@@ -13,14 +11,12 @@ import fetch from "node-fetch"; // fetch
 
 (async () => {
 
-
-	const app = express();
+    const app = express();
 	app.set("trust proxy", true);
 
 
 	app.use(cors());
-	// @ts-expect-error
-	app.use((req, res, next) => {
+	app.use((_req, res, next) => {
 		res.set("Cache-Control", "no-cache");
 		next();
 	});
@@ -54,19 +50,19 @@ import fetch from "node-fetch"; // fetch
 	});
 
 
+// BIG IMPORTANT TODO: FIX THESE 3
+
+
     // ./download
-	app.get("/download", (_req, res) => res.redirect(DOWNLOAD_LINK));
+	app.get("/download", (_req, res) => { res.redirect("DOWNLOAD_LINK") });
 
 
 	// ./license
-    app.get("/license", (_req, res) => res.redirect(LICENSE_LINK));
+    app.get("/license", (_req, res) => { res.redirect("LICENSE_LINK") });
 
 	
-
     // ./gui
-    app.get("/gui", (_req, res) => {
-		res.type("text/js").send(latestCheatGui);
-	});
+    app.get("/gui", (_req, res) => { res.type("text/js").send("latestCheatGui"); });
 
 
 
