@@ -8,6 +8,7 @@ import { transform } from "sucrase";
 const es6 = (...args: Parameters<typeof String["raw"]>) => transform(String.raw(...args), { transforms: ["typescript"] }).code;
 
 /** Latest unmodified main.js */
+// @ts-expect-error
 let latestVanillaFile : string | null = null;
 
 /** Latest patched main.js */
