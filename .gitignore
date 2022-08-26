@@ -1,6 +1,10 @@
 # MacOS sucks balls
 **/**/.DS_STORE
 
+# override
+/html/main.js
+
+
 # Logs
 logs
 *.log

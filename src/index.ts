@@ -2,7 +2,7 @@ import type { Server } from "http"; // Server typings
 import express from "express"; // Express server
 import cors from "cors"; // CORS
 import Nil from "./util"; // Gamefile patchers
-import { /* DOWNLOAD_LINK, */ VERSION, /* LICENSE_LINK, */ HTTP_PORT, UNMINIFY_SOUCE, INDEX_HTML, STYLE_CSS } from "./constants"; // Constants
+import { /* DOWNLOAD_LINK, */ VERSION, /* LICENSE_LINK, */ HTTP_PORT, UNMINIFY_SOUCE, INDEX_HTML, STYLE_CSS, OVERRIDE } from "./constants"; // Constants
 import beautify from "js-beautify"; // JavaScript beautifier
 
 
@@ -34,10 +34,16 @@ import beautify from "js-beautify"; // JavaScript beautifier
     // @ts-expect-error
 	app.get("/app/main*js", async (req, res) => {
 		try {
+
+			if (OVERRIDE !== null) {
+				return res.type("text/js").send(OVERRIDE);
+			}
+
+
             let output : string = "";
             output += "// modified main.js \n\n";
             output += (UNMINIFY_SOUCE) ? beautify(await (await Nil.getPatchedFile()).valueOf()) : await (await Nil.getPatchedFile()).valueOf();
-			res.type("js").send(output);
+			return res.type("text/js").send(output);
 		} catch (error : unknown) {
 			console.error(error);
 			return res.status(500).type("text/plain").send((error as any).message);
