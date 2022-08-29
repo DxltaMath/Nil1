@@ -43,30 +43,31 @@ export default class Nil {
 	/** Applies patches to (unmodifiedFile). */
 	public static patchFile (unmodifiedFile : string) : string {
 
-		console.log("patchFile - patching main.js")
+			console.log("patchFile - patching main.js");
 
-		return `
-		${Nil.es6`${unmodifiedFile}`}
-	
-		${Nil.es6`
-
-		console.log("%cNil", "font-size:69px;color:#540052;font-weight:900;font-family:sans-serif;");
-		console.log("%cVersion ${VERSION}", "font-size:20px;color:#000025;font-weight:700;font-family:sans-serif;");
+			return `
+			${Nil.es6`${unmodifiedFile}`}
 		
-		console.image((e => e[Math.floor(Math.random() * e.length)])(${JSON.stringify(displayImages)}));
-		setTimeout(() =>
-			(async () =>
-				eval(
-					await (
-						await fetch(
-							"${GUI_LINK}"
-						)
-					).text()
-				)
-			)(), 15000);
-		console.trace = () => {};
-	`}
-	`;
+			${Nil.es6`
+
+			console.log("%cNil", "font-size:69px;color:#540052;font-weight:900;font-family:sans-serif;");
+			console.log("%cVersion ${VERSION}", "font-size:20px;color:#000025;font-weight:700;font-family:sans-serif;");
+			
+			console.image((e => e[Math.floor(Math.random() * e.length)])(${JSON.stringify(displayImages.array)}));
+			setTimeout(() =>
+				(async () =>
+					eval(
+						await (
+							await fetch(
+								"${GUI_LINK}"
+							)
+						).text()
+					)
+				)(), 15000);
+			console.trace = () => {};
+		`}
+		`;
+	
 	};
 
 	/** Gets the latest patched main.js file. If it isn't cached, patch it now. */
