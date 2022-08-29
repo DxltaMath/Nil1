@@ -47,7 +47,7 @@ export default class Nil {
 
 
 			let patched = unmodifiedFile;
-			patched = patched.replaceAll(`doNotRandomize=!1`, `doNotRandomize=!1`); // doesn't work?
+			patched = patched.replaceAll(`doNotRandomize=!1`, `doNotRandomize=1`);
 
 			patched = patched.replaceAll(`function y(t){return function(e){if("__ngUnwrap__"===e)return t;!1===t(e)&&(e.preventDefault(),e.returnValue=!1)}}`, `
 			function y(t) {
