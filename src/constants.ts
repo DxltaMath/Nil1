@@ -14,7 +14,7 @@ export const VERSION : string = "" || "0.0.1";
 
 /** Override your own dGUI bundle URL here, if not, Nil will use the official dGUI URL. (controlled by DxltaMath admins)
  * CAUTION: dGUIs have complete access. Only use dGUIs that you trust. */
-export const GUI_LINK : string = "" || "SoonTM lol";
+export const GUI_LINK : string = "" || "https://raw.githubusercontent.com/DxltaMath/dGUI/master/dist/bundle.js";
 
 /** Set this to true if you would like to unminify main.js
  * CAUTION: this will HEAVILY increase the filesize of main.js- use for debugging ONLY. */
