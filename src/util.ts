@@ -27,7 +27,7 @@ export default class Nil {
 		try {
 			if (Nil.latestVanillaFile === null) {
 				console.log("getFile - fetching new main.js");
-				const mainjs = await (await fetch(`https://www.deltamath.com/app/main.761406757919c0973f71.js`)).text();
+				const mainjs = await (await fetch(`https://www.deltamath.com/app/main.acc433707686c90df09b.js`)).text();
 				Nil.latestVanillaFile = mainjs;
 				return mainjs;
 			} else {
@@ -45,8 +45,28 @@ export default class Nil {
 
 			console.log("patchFile - patching main.js");
 
+
+			let patched = unmodifiedFile;
+			patched = patched.replaceAll(`doNotRandomize=!1`, `doNotRandomize=!1`); // doesn't work?
+
+			patched = patched.replaceAll(`function y(t){return function(e){if("__ngUnwrap__"===e)return t;!1===t(e)&&(e.preventDefault(),e.returnValue=!1)}}`, `
+			function y(t) {
+                return function(e) {
+
+                    if (e.path[0].tagName === "BUTTON" && e.path[0].className === "btn btn-default timed-start-button") {
+                        console.log("Timer toggle (prevent OFF)");
+                    }
+
+
+                    if ("__ngUnwrap__" === e) return t;
+                    !1 === t(e) && (e.preventDefault(), e.returnValue = !1)
+                }
+            }
+			`);
+
+
 			return `
-			${Nil.es6`${unmodifiedFile}`}
+			${patched}
 		
 			${Nil.es6`
 
