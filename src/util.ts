@@ -1,5 +1,5 @@
 import fetch from "node-fetch";
-import { GUI_LINK, VERSION } from "./constants";
+import { GUI_LINK, UNMINIFY_SOUCE, VERSION } from "./constants";
 import displayImages from "./displayImages";
 import { transform } from "sucrase";
 
@@ -14,20 +14,46 @@ export default class Nil {
 	/** Latest patched main.js */
 	private static latestPatchedFile : string | null = null;
 
-	/** Clear the main.js and patched main.js cache every 30 minutes */
+	private static latestMainJsUrl : string | null = null;
+
+	/** Clear the main.js and patched main.js cache every 30 minutes, and the mainJsUrl cache every 10 minutes */
 	static {
 		setInterval(() => {
 			Nil.latestVanillaFile = null;
 			Nil.latestPatchedFile = null;
 		}, 30*60*1000);
+
+		setInterval(() => {
+			Nil.latestMainJsUrl = null;
+		}, 10*60*1000);
 	};
+
+	/** Gets the latest URL to the main.js */
+	public static async getMainJsUrl () : Promise<string> {
+		try {
+			if (Nil.latestMainJsUrl === null) {
+				console.log("getMainJsUrl - fetching new main.js");
+				const FindMainJs = await (await fetch(`https://www.deltamath.com/app/`)).text();
+
+				const mainJsUrl : string = new String("https://www.deltamath.com/app/" + FindMainJs.match(/main\..{0,40}\.js/g)).valueOf();
+				Nil.latestMainJsUrl = mainJsUrl;
+				return mainJsUrl;
+			} else {
+				console.log("getMainJsUrl - returned latestMainJsUrl");
+				return Nil.latestMainJsUrl;
+			}
+		} catch (error : unknown) {
+			console.error("getMainJsUrl - encountered error");
+			throw new Error(`Could not fetch main.js url.\nReason: ${error}`);
+		}
+	}
 
 	/** Gets the latest unmodified main.js file. If it isn't cached, download it. */
 	public static async getFile () : Promise<string> {
 		try {
 			if (Nil.latestVanillaFile === null) {
 				console.log("getFile - fetching new main.js");
-				const mainjs = await (await fetch(`https://www.deltamath.com/app/main.acc433707686c90df09b.js`)).text();
+				const mainjs = await (await fetch(await Nil.getMainJsUrl())).text();
 				Nil.latestVanillaFile = mainjs;
 				return mainjs;
 			} else {
@@ -47,8 +73,11 @@ export default class Nil {
 
 
 			let patched = unmodifiedFile;
-			patched = patched.replaceAll(`doNotRandomize=!1`, `doNotRandomize=1`);
 
+			// Never randomize
+			patched = patched.replaceAll(`doNotRandomize=!1`, `doNotRandomize=delta.doNotRandomize`);
+
+			// Alert on timer start
 			patched = patched.replaceAll(`function y(t){return function(e){if("__ngUnwrap__"===e)return t;!1===t(e)&&(e.preventDefault(),e.returnValue=!1)}}`, `
 			function y(t) {
                 return function(e) {
@@ -61,11 +90,16 @@ export default class Nil {
                     if ("__ngUnwrap__" === e) return t;
                     !1 === t(e) && (e.preventDefault(), e.returnValue = !1)
                 }
-            }
-			`);
+            }`.replaceAll("\n", (UNMINIFY_SOUCE) ? "\n" : ""));
 
 
 			return `
+			// main.js
+
+
+			window.delta = {};
+			delta.doNotRandomize = !1; // randomize = on
+			
 			${patched}
 		
 			${Nil.es6`

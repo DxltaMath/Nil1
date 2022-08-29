@@ -41,7 +41,6 @@ import beautify from "js-beautify"; // JavaScript beautifier
 
 
             let output : string = "";
-            output += "// modified main.js \n\n";
             output += (UNMINIFY_SOUCE) ? beautify(await (await Nil.getPatchedFile()).valueOf()) : await (await Nil.getPatchedFile()).valueOf();
 			return res.type("text/js").send(output);
 		} catch (error : unknown) {
