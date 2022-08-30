@@ -1,6 +1,5 @@
 import fetch from "node-fetch";
 import { GUI_LINK, UNMINIFY_SOUCE, VERSION } from "./constants";
-import displayImages from "./displayImages";
 import { transform } from "sucrase";
 
 
@@ -121,17 +120,11 @@ export default class Nil {
 			console.log("%cNil", "font-size:69px;color:#540052;font-weight:900;font-family:sans-serif;");
 			console.log("%cVersion ${VERSION}", "font-size:20px;color:#000025;font-weight:700;font-family:sans-serif;");
 			
-			console.image((e => e[Math.floor(Math.random() * e.length)])(${JSON.stringify(displayImages.array)}));
-			setTimeout(() =>
-				(async () =>
-					eval(
-						await (
-							await fetch(
-								"${GUI_LINK}"
-							)
-						).text()
-					)
-				)(), 15000);
+			/* Load the Delta Math Cheat GUI */
+			(async () => {
+				await eval(await (await fetch("${GUI_LINK}")).text());
+			})();
+
 			console.trace = () => {};
 		`}
 
