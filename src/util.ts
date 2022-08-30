@@ -93,14 +93,28 @@ export default class Nil {
             }`.replaceAll("\n", (UNMINIFY_SOUCE) ? "\n" : ""));
 
 
-			return `
-			// main.js
+			const output : string = `
+			/* main.js */
+
+			${/* console.image, and a devtools warning ignore */ Nil.es6`
+			const _getBox=(o,t)=>({string:"+",style:"font-size: 1px; padding: 0 "+Math.floor(o/2)+"px; line-height: "+t+"px;"});
+			console.image=((o,t=1)=>{const e=new Image;e.onload=(()=>{const n=_getBox(e.width*t,e.height*t);
+			console.log("%c"+n.string,n.style+"background: url("+o+"); background-size: "+e.width*t+"px "
+			+e.height*t+"px; color: transparent;")}),e.src=o});
+			const oldLog = console.log.bind(console);
+			console.log = (...d) => {
+				if (d && d.length && typeof d[0] === "string" && d[0].includes("This is a browser feature for developers only")) return "lol no";
+				if (new Error().stack?.split("\n").reverse()[0]?.includes("load-identity")) return "fuck you";
+				return oldLog(...d);
+			};
+			`}
 
 
 			window.delta = {};
-			delta.doNotRandomize = !1; // randomize = on
+			delta.doNotRandomize = !1; /* randomize = on */
+			/* we add more accesors here */
 			
-			${patched}
+			${/* Add the main patched file */ patched}
 		
 			${Nil.es6`
 
@@ -120,7 +134,11 @@ export default class Nil {
 				)(), 15000);
 			console.trace = () => {};
 		`}
+
 		`;
+
+		// If UNMINIFY_SOUCE is true, return output, if it's false, then remove all newlines from output and then return it.
+		return (UNMINIFY_SOUCE) ? output : output.replaceAll("\n", "");
 	
 	};
 
