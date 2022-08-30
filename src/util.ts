@@ -96,7 +96,7 @@ export default class Nil {
                     !1 === t(e) && (e.preventDefault(), e.returnValue = !1)
                 }
             }
-			`.replaceAll("\n", ""));
+			`);
 
 			// Allow escaping timed activities
 			patched = patched.replaceAll(`{if($(".timed-start-button").length&&"Stop"==$(".timed-start-button").text())return alertDialog("You must stop the timer before pressing back. ");this.router.url.startsWith("/explore")?this.router.navigate(["/explore"]):this.router.url.startsWith("/student")?this.router.navigate(["/student"]):this.location.back()}`, `
@@ -115,7 +115,7 @@ export default class Nil {
 				/* Otherwise do this: */
 				this.router.url.startsWith("/explore") ? this.router.navigate(["/explore"]) : this.router.url.startsWith("/student") ? this.router.navigate(["/student"]) : this.location.back()
 			}
-			`.replaceAll("\n", ""));
+			`);
 
 
 
@@ -162,7 +162,7 @@ export default class Nil {
 
 		`;
 
-		return output.replaceAll("\n", "");
+		return output;
 	
 	};
 
