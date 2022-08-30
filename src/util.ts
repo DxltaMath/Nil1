@@ -109,10 +109,10 @@ export default class Nil {
 				/** If the button says "Stop" */
 				const stop = $(".timed-start-button").length && "Stop" == $(".timed-start-button").text();
 
-				// If escape is false and stop is true, then do this:
+				/* If escape is false and stop is true, then do this: */
 				if (!escape && stop) return alertDialog("You must stop the timer before pressing back. ");
 
-				// Otherwise do this:
+				/* Otherwise do this: */
 				this.router.url.startsWith("/explore") ? this.router.navigate(["/explore"]) : this.router.url.startsWith("/student") ? this.router.navigate(["/student"]) : this.location.back()
 			}
 			`.replaceAll("\n", ""));
