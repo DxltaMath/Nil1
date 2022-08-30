@@ -3,6 +3,7 @@
 
 import { GUI_LINK } from "./constants";
 
+/** a thing that caches the latest dGUI */
 export default class dGUI {
 
     /** latest dGUI cache */
