@@ -101,7 +101,7 @@ export default class Nil {
 			// Allow escaping timed activities
 			patched = patched.replaceAll(`{if($(".timed-start-button").length&&"Stop"==$(".timed-start-button").text())return alertDialog("You must stop the timer before pressing back. ");this.router.url.startsWith("/explore")?this.router.navigate(["/explore"]):this.router.url.startsWith("/student")?this.router.navigate(["/student"]):this.location.back()}`, `
 			{
-				// Only happens while timer is running
+				/* Only happens while timer is running */
 
 				/** Allow exiting timed problems without clicking "Stop" */
 				const escape = window.delta.allowEscapingTimed;
