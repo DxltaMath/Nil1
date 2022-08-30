@@ -76,9 +76,10 @@ export default class Nil {
 			console.log("patchFile - patching main.js");
 
 
-			let patched = unmodifiedFile;
+			/** patched deltamath code */
+			let patched : string = unmodifiedFile;
 
-			// Never randomize
+			// Never randomize timed
 			patched = patched.replaceAll(`doNotRandomize=!1`, `doNotRandomize=delta.doNotRandomize`);
 
 			// Alert on timer start
@@ -96,7 +97,6 @@ export default class Nil {
                 }
             }
 			`.replaceAll("\n", ""));
-
 
 			// Allow escaping timed activities
 			patched = patched.replaceAll(`{if($(".timed-start-button").length&&"Stop"==$(".timed-start-button").text())return alertDialog("You must stop the timer before pressing back. ");this.router.url.startsWith("/explore")?this.router.navigate(["/explore"]):this.router.url.startsWith("/student")?this.router.navigate(["/student"]):this.location.back()}`, `
@@ -118,10 +118,17 @@ export default class Nil {
 			`.replaceAll("\n", ""));
 
 
-			const output : string = `
-			/* main.js */
 
-			${/* console.image, and a devtools warning ignore */ Nil.es6`
+
+			let variables : string = "window.delta = {};";
+			variables += `delta.doNotRandomize = !1;`;
+			variables += `delta.allowEscapingTimed = false;`;
+
+
+			const output : string = `/* main.js */
+			
+
+			${/* console.image, and ignore anti devtools */ Nil.es6`
 			const _getBox=(o,t)=>({string:"+",style:"font-size: 1px; padding: 0 "+Math.floor(o/2)+"px; line-height: "+t+"px;"});
 			console.image=((o,t=1)=>{const e=new Image;e.onload=(()=>{const n=_getBox(e.width*t,e.height*t);
 			console.log("%c"+n.string,n.style+"background: url("+o+"); background-size: "+e.width*t+"px "
@@ -133,26 +140,25 @@ export default class Nil {
 			};
 			`}
 
+			${/** Add accesors */ Nil.es6`${variables}`}
 
-			window.delta = {};
-			delta.doNotRandomize = !1;
-			delta.allowEscapingTimed = false;
-			/* we add more accesors here */
 			
+	
+
 			${/* Add the main patched file */ patched}
 		
 			${Nil.es6`
-
 			console.log("%cNil", "font-size:69px;color:#540052;font-weight:900;font-family:sans-serif;");
 			console.log("%cVersion ${VERSION}", "font-size:20px;color:#000025;font-weight:700;font-family:sans-serif;");
 			
 			/* Load the Delta Math Cheat GUI */
 			(async () => {
+				await new Promise(r => setTimeout(r, 5000));
 				await eval(await (await fetch("${GUI_LINK}")).text());
 			})();
 
 			console.trace = () => {};
-		`}
+			`}
 
 		`;
 
