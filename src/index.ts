@@ -53,10 +53,7 @@ import dGUI from "./gui";
 	app.get("/version", (_req, res) => {
 		res.type("text/plain").send(VERSION);
 	});
-
-
-// BIG IMPORTANT TODO: FIX THESE 3
-
+	
 
     // ./download
 	app.get("/download", (_req, res) => { res.redirect(DOWNLOAD_LINK) });
