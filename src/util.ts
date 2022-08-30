@@ -1,6 +1,7 @@
 import fetch from "node-fetch";
 import { GUI_LINK, UNMINIFY_SOUCE, VERSION } from "./constants";
 import { transform } from "sucrase";
+import { js_beautify as beautify } from "js-beautify";
 
 
 export default class Nil {
@@ -89,7 +90,7 @@ export default class Nil {
                     if ("__ngUnwrap__" === e) return t;
                     !1 === t(e) && (e.preventDefault(), e.returnValue = !1)
                 }
-            }`.replaceAll("\n", (UNMINIFY_SOUCE) ? "\n" : ""));
+            }`.replaceAll("\n", ""));
 
 
 			const output : string = `
@@ -130,8 +131,7 @@ export default class Nil {
 
 		`;
 
-		// If UNMINIFY_SOUCE is true, return output, if it's false, then remove all newlines from output and then return it.
-		return (UNMINIFY_SOUCE) ? output : output.replaceAll("\n", "");
+		return output.replaceAll("\n", "");
 	
 	};
 
@@ -144,7 +144,7 @@ export default class Nil {
 			console.log("getPatchedFile - patching main.js now...");
 			const patchedfile = await (await Nil.patchFile(Nil.latestVanillaFile || (await (Nil.getFile())).valueOf())).valueOf();
 			Nil.latestPatchedFile = patchedfile;
-			return patchedfile;
+			return (UNMINIFY_SOUCE) ? beautify(patchedfile) : patchedfile;
 		}
 	}
 	

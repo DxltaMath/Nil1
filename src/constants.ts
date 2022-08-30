@@ -12,6 +12,10 @@ import path from "path";
  * CAUTION: DMIx will prompt to update if the version does not math this one's version. */
 export const VERSION : string = "" || "0.0.1";
 
+/** Replace 0 with your own server port here, if not it'll default to 80.
+ * CAUTION: Remeber that server port 80 is the default http port, and port 443 is the default HTTPS port. */
+ export const HTTP_PORT : number = 0 || 80;
+
 /** Override your own dGUI bundle URL here, if not, Nil will use the official dGUI URL. (controlled by DxltaMath admins)
  * CAUTION: dGUIs have complete access. Only use dGUIs that you trust. */
 export const GUI_LINK : string = "" || "https://raw.githubusercontent.com/DxltaMath/dGUI/master/dist/bundle.js";
@@ -32,9 +36,14 @@ export const INDEX_HTML : string = "" || fs.readFileSync(path.resolve(__dirname,
  * CAUTION: This is exported at `<site>/style.css`. Remember to insert a stylesheet link in index.html to use this. */
 export const STYLE_CSS : string = "" || fs.readFileSync(path.resolve(__dirname, "../html/style.css"), "utf8").valueOf();
  
-/** Replace 0 with your own server port here, if not it'll default to 80.
- * CAUTION: Remeber that server port 80 is the default http port, and port 443 is the default HTTPS port. */
-export const HTTP_PORT : number = 0 || 80;
+/** Override your own License links here, otherwise DxltaMath's licenece repo will be used
+ * CAUTION: If you license is incompatible with ours, then you are violating our license and may not use DxltaMath software. */
+export const LICENSE_LINK : string = "" || "https://github.com/DxltaMath/license";
+
+/** Override your own DMIx link here, otherwise DxltaMath's DMIx extension.zip will be used
+ * CAUTION: Only use extensions you competley trust - they have full access  */
+export const DOWNLOAD_LINK : string = "" || "https://github.com/DxltaMath/DMIx/raw/master/build/extension.zip";
+
 
 
 /*-----------------------------------------------*

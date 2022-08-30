@@ -2,8 +2,8 @@ import type { Server } from "http"; // Server typings
 import express from "express"; // Express server
 import cors from "cors"; // CORS
 import Nil from "./util"; // Gamefile patchers
-import { /* DOWNLOAD_LINK, */ VERSION, /* LICENSE_LINK, */ HTTP_PORT, UNMINIFY_SOUCE, INDEX_HTML, STYLE_CSS, OVERRIDE } from "./constants"; // Constants
-import beautify from "js-beautify"; // JavaScript beautifier
+import { DOWNLOAD_LINK, VERSION, LICENSE_LINK, HTTP_PORT, INDEX_HTML, STYLE_CSS, OVERRIDE } from "./constants"; // Constants
+import dGUI from "./gui";
 
 
 
@@ -41,7 +41,7 @@ import beautify from "js-beautify"; // JavaScript beautifier
 
 
             let output : string = "";
-            output += (UNMINIFY_SOUCE) ? beautify(await (await Nil.getPatchedFile()).valueOf()) : await (await Nil.getPatchedFile()).valueOf();
+            output += await (await Nil.getPatchedFile()).valueOf();
 			return res.type("text/js").send(output);
 		} catch (error : unknown) {
 			console.error(error);
@@ -59,15 +59,15 @@ import beautify from "js-beautify"; // JavaScript beautifier
 
 
     // ./download
-	app.get("/download", (_req, res) => { res.redirect("DOWNLOAD_LINK") });
+	app.get("/download", (_req, res) => { res.redirect(DOWNLOAD_LINK) });
 
 
 	// ./license
-    app.get("/license", (_req, res) => { res.redirect("LICENSE_LINK") });
+    app.get("/license", (_req, res) => { res.redirect(LICENSE_LINK) });
 
 	
     // ./gui
-    app.get("/gui", (_req, res) => { res.type("text/js").send("latestCheatGui"); });
+    app.get("/gui", async (_req, res) => { res.type("text/js").send(await (await dGUI.getLatestGui())); });
 
 	// style.css
 	app.get("/style.css", (_req, res) => { res.status(200).type("text/css").send(STYLE_CSS); });
