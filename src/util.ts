@@ -140,7 +140,7 @@ export default class Nil {
 			};
 			`}
 
-			${/** Add accesors */ Nil.es6`${variables}`}
+			${/** Add accesors */ variables}
 
 			
 	
