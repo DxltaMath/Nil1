@@ -3,8 +3,11 @@ import { GUI_LINK, UNMINIFY_SOUCE, VERSION } from "./constants";
 import { transform } from "sucrase";
 import { js_beautify as beautify } from "js-beautify";
 
-
+/** 
+ * The actual DeltaMath script patcher.
+ */
 export default class Nil {
+
 	/** es6 convertion template (powered by sucrase) */
 	public static readonly es6 = (...args: Parameters<typeof String["raw"]>) => transform(String.raw(...args), { transforms: ["typescript"] }).code;
 
@@ -14,6 +17,7 @@ export default class Nil {
 	/** Latest patched main.js */
 	private static latestPatchedFile : string | null = null;
 
+	/** Latest main.js URL */
 	private static latestMainJsUrl : string | null = null;
 
 	/** Clear the main.js and patched main.js cache every 30 minutes, and the mainJsUrl cache every 10 minutes */
@@ -104,14 +108,14 @@ export default class Nil {
 			const oldLog = console.log.bind(console);
 			console.log = (...d) => {
 				if (d && d.length && typeof d[0] === "string" && d[0].includes("This is a browser feature for developers only")) return "lol no";
-				if (new Error().stack?.split("\n").reverse()[0]?.includes("load-identity")) return "fuck you";
 				return oldLog(...d);
 			};
 			`}
 
 
 			window.delta = {};
-			delta.doNotRandomize = !1; /* randomize = on */
+			delta.doNotRandomize = !1;
+			delta.allowEscapingTimed = false;
 			/* we add more accesors here */
 			
 			${/* Add the main patched file */ patched}
