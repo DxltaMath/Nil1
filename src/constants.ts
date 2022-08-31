@@ -10,7 +10,7 @@ import path from "path";
 
 /** Override your own DMIx version here, if not, Nil will use the latest DMIx version. (updated manually by DxltaMath admins)
  * CAUTION: DMIx will prompt to update if the version does not math this one's version. */
-export const VERSION : string = "" || "0.0.1";
+export const VERSION : string = "" || "0.0.2";
 
 /** Replace 0 with your own server port here, if not it'll default to 80.
  * CAUTION: Remeber that server port 80 is the default http port, and port 443 is the default HTTPS port. */
