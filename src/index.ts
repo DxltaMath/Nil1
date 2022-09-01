@@ -1,4 +1,4 @@
-import type { Server } from "http"; // Server typings
+import type { Server } from "http"; // HTTP Server typings
 import express from "express"; // Express server
 import cors from "cors"; // CORS
 import Nil from "./util"; // Gamefile patchers
