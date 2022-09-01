@@ -87,8 +87,6 @@ export default class Nil {
 			function y(t) {
                 return function(e) {
 
-					console.log(e);
-
                     if (e.path[0].tagName === "BUTTON" && e.path[0].className === "btn btn-default timed-start-button") {
                         console.log("Timer toggle (prevent OFF)");
                     }
