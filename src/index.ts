@@ -16,7 +16,8 @@ import dGUI from "./gui";
 
 
 	app.use(cors());
-	app.use((_req, res, next) => {
+	app.use((req, res, next) => {
+		console.log(req.ip);
 		res.set("Cache-Control", "no-cache");
 		next();
 	});
