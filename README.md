@@ -1,3 +1,7 @@
+# DEPRECATED IN FAVOR OF [NIL V2](https://github.com/DxltaMath/Nil2)
+
+<br><br>
+
 # Nil
 A code-file modifier for Delta Math.
 
